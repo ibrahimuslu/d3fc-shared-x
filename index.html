@@ -1,12 +1,12 @@
 <html>
   <head>
     <!-- include polyfills for custom event, Symbol and Custom Elements -->
-    <script src="//unpkg.com/babel-polyfill@6.26.0/dist/polyfill.js"></script>
-    <script src="//unpkg.com/custom-event-polyfill@0.3.0/custom-event-polyfill.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/document-register-element/1.8.0/document-register-element.js"></script>
+    <!-- <script src="//unpkg.com/babel-polyfill@6.26.0/dist/polyfill.js"></script> -->
+    <!-- <script src="//unpkg.com/custom-event-polyfill@0.3.0/custom-event-polyfill.js"></script> -->
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/document-register-element/1.8.0/document-register-element.js"></script> -->
 
-    <script src="//unpkg.com/d3@5.15.0/dist/d3.min.js"></script>
-    <script src="//unpkg.com/d3fc@14.2.3/build/d3fc.js"></script>
+    <script src="//unpkg.com/d3@6.1.1/dist/d3.min.js"></script>
+    <script src="//unpkg.com/d3fc@15.2.6/build/d3fc.js"></script>
     <script src="//unpkg.com/d3-svg-annotation@2.5.1/indexRollup.js"></script>
     <style>
       .annotation-note-bg {
@@ -55,10 +55,16 @@
       }
 
       #chart-container > div {
-        position: absolute;
+        position: relative;
         top: 0; bottom: 0; right: 0; left: 0;
+        /* height: 200px; */
         text-align: middle;
         vertical-align: middle;
+        margin-left: 45px;
+        border: 0px solid white;
+        height: 120px;
+        width: 90%;
+        margin-bottom:-38px;
       }
 
       #loading {
@@ -80,7 +86,7 @@
       }
 
       .tick text {
-        display: none;
+        display: block;
       }
 
       a,
@@ -94,28 +100,55 @@
       a:hover {
         text-decoration: underline;
       }
+      #graphChart > d3fc-svg {
+        visibility: hidden;
+      }
+
     </style>
   </head>
   <body>
     <div id="title">
       <div class="subtitle">
-        <h2>Hathi Trust Library</h2>
+        <h2>d3fc webgl multichart shared x-axis example</h2>
         <small>sourcecode available on 
         <a href="https://github.com/ColinEberhardt/d3fc-webgl-hathi-explorer"
           >GitHub</a
         ></small>
       </div>
       <div class="controls">
-        <a href="#" id="language" class="active">Language</a> |
-        <a id="year" href="#">Year</a> 
+        <p id="pointedValue"></p>
+        <div id="fps"></div>
       </div>
     </div>
 
     <div id="chart-container">
-      <div id="chart"></div>
-      <div id="loading"><span>loading...</span></div>
-    </div>
+      
+      <div id="loading"><span>loading...</span></div>     
+       <!-- <div id="navigator-chart"></div> -->
 
-    <script src="index.js" type="module"></script>
+
+
+       <div class="graphChart" id="chart0" use-device-pixel-ratio set-webgl-viewport></div>  
+       <div class="graphChart" id="chart1" use-device-pixel-ratio set-webgl-viewport></div>  
+       <div class="graphChart" id="chart2" use-device-pixel-ratio set-webgl-viewport></div>   
+       <div class="graphChart" id="chart3" use-device-pixel-ratio set-webgl-viewport></div>   
+       <div class="graphChart" id="chart4" use-device-pixel-ratio set-webgl-viewport></div>  
+       <div class="graphChart" id="chart5" use-device-pixel-ratio set-webgl-viewport></div>    
+       <div class="graphChart" id="chart6" use-device-pixel-ratio set-webgl-viewport></div>    
+       <div class="graphChart" id="chart7" use-device-pixel-ratio set-webgl-viewport></div>     
+       <div class="graphChart" id="chart8" use-device-pixel-ratio set-webgl-viewport></div>     
+       <div class="graphChart" id="chart9" use-device-pixel-ratio set-webgl-viewport></div>  
+       <div class="graphChart" id="chart10" use-device-pixel-ratio set-webgl-viewport></div>   
+       <div class="graphChart" id="chart11" use-device-pixel-ratio set-webgl-viewport></div> 
+       <div class="graphChart" id="chart12" use-device-pixel-ratio set-webgl-viewport></div>   
+       <div class="graphChart" id="chart13" use-device-pixel-ratio set-webgl-viewport></div>   
+       <div class="graphChart" id="chart14" use-device-pixel-ratio set-webgl-viewport></div> 
+      <!-- <div id="chart1" use-device-pixel-ratio set-webgl-viewport></d3fc-canvas>       -->
+
+        <!-- <div id="chart0"></div> -->
+
+      </div>
+
+    <script src="index_best.js" type="module"></script>
   </body>
 </html>

@@ -54,7 +54,7 @@ streamingLoaderWorker.onmessage = ({
         iterateElements(".controls a", el2 => el2.classList.remove("active"));
         el.classList.add("active");
         fillColor.value(el.id === "language" ? languageFill : yearFill);
-        redraw();
+        // requestAnimationFrame(redraw);
       });
     });
 
@@ -66,7 +66,6 @@ streamingLoaderWorker.onmessage = ({
       .addAll(data);
   }
 
-  redraw();
 };
 streamingLoaderWorker.postMessage("data.tsv");
 
@@ -90,11 +89,11 @@ const pointSeries = fc
 const zoom = d3
   .zoom()
   .scaleExtent([0.8, 10])
-  .on("zoom", () => {
+  .on("zoom", (event) => {
     // update the scales based on current zoom
-    xScale.domain(d3.event.transform.rescaleX(xScaleOriginal).domain());
-    yScale.domain(d3.event.transform.rescaleY(yScaleOriginal).domain());
-    redraw();
+    xScale.domain(event.transform.rescaleX(xScaleOriginal).domain());
+    yScale.domain(event.transform.rescaleY(yScaleOriginal).domain());
+    // requestAnimationFrame(redraw);
   });
 
 const annotations = [];
@@ -117,7 +116,7 @@ const pointer = fc.pointer().on("point", ([coord]) => {
     annotations[0] = createAnnotationData(closestDatum);
   }
 
-  redraw();
+  // requestAnimationFrame(redraw);
 });
 
 const annotationSeries = seriesSvgAnnotation()
@@ -137,23 +136,44 @@ const chart = fc
     // only render the annotations series on the SVG layer
     fc
       .seriesSvgMulti()
-      .series([annotationSeries])
+      .series([annotationSeries,
+        fc.annotationSvgGridline()])
       .mapping(d => d.annotations)
+      
   )
   .decorate(sel =>
     sel
       .enter()
       .select("d3fc-svg.plot-area")
-      .on("measure.range", () => {
-        xScaleOriginal.range([0, d3.event.detail.width]);
-        yScaleOriginal.range([d3.event.detail.height, 0]);
+      .on("measure.range", (event) => {
+        xScaleOriginal.range([0, event.detail.width]);
+        yScaleOriginal.range([event.detail.height, 0]);
       })
       .call(zoom)
       .call(pointer)
   );
 
+  let lastTime = 0;
+  const times = [];
+  let it = 0;
 // render the chart with the required data
 // Enqueues a redraw to occur on the next animation frame
-const redraw = () => {
-  d3.select("#chart").datum({ annotations, data }).call(chart);
+const showFPS = (t) => {
+  const dt = t - lastTime;
+  lastTime = t;
+  times.push(dt);
+  it++;
+  if (times.length > 10) times.splice(0, 1);
+  if (it > 10) {
+    it = 0;
+    const avg = times.reduce((s, t) => s + t, 0) / times.length;
+    d3.select('#fps').text(`fps: ${Math.floor(1000 / avg)}`);
+  }
 };
+const redraw = (t) => {
+  showFPS(t)
+  d3.select("#chart").datum({ annotations, data }).call(chart);
+  requestAnimationFrame(redraw);
+};
+
+requestAnimationFrame(redraw);

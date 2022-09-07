@@ -62,7 +62,7 @@ onmessage = async ({ data: filename }) => {
             controller.close();
             return;
           }
-
+          // console.log(value);
           const items = tsvParser.parseChunk(value);
 
           totalBytes += value.byteLength;
